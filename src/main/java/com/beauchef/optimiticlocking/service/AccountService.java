@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 /**
  * @author beauchef on 2018-03-11.
  */
+@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Retryable(StaleStateException.class)
 @Service
 @Slf4j
 public class AccountService {
@@ -49,8 +51,6 @@ public class AccountService {
         return conversionService.convert(entity, Account.class);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @Retryable(StaleStateException.class)
     @SneakyThrows
     public Optional<Account> addAmount(Long id, int amount) {
         Optional<Account> account;
